@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * A custom module for GDPR compliance.
+ */
+
+/**
+ * Implements hook_help().
+ *
+ * Displays help and module information.
+ */
+function webform_asu_disclaimer_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#webform_asu_disclaimer":
+      $output = t("<p>Adds a disclaimer to all Webforms for GDPR compliance</p>");
+      return $output;
+
+    case 'admin/config/system/webform_asu_disclaimer':
+      if (module_exists('help')) {
+        $help_text = t('More help can be found at <a href="!help">webform_asu_disclaimer help</a>.", array("!help" => url("admin/help/webform_asu_disclaimer"))');
+      }
+      else {
+        $help_text = '';
+      }
+      $output = "<p>" . t("Adds a disclaimer to all Webforms for GDPR compliance") . " $help_text</p>";
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function webform_asu_disclaimer_form_alter(&$form, &$form_state, $form_id) {
+  /*dpm($form);*/
+
+  if ((strstr($form_id, 'webform_client_form'))) {
+    $form['rfi_consent'] = array(
+      '#type' => 'markup',
+      '#markup' => "<div class='alert alert-success'><p class='small'><strong>By completing this form and submitting your information to ASU, you consent to:</strong></p><ol class='small'><li>ASU using this information to contact you regarding information as you request.</li><li>The terms of <a href='https://www.asu.edu/privacy/'>ASU's Privacy Statement</a>.</li><li>If you are in the European Union or another country or state that has adopted the GDPR (General Data Protection<br>Regulation) or similar privacy protection, please also read <a href='https://www.asu.edu/privacy#european-union-supplement'>ASU's European Supplement to ASU's Privacy Statement</a>.</li></ol></div>"
+    );
+    $form['actions']['submit']['#value'] = t("I agree / Submit");
+  }
+}

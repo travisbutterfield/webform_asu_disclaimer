@@ -1,0 +1,8 @@
+name = Webform ASU Disclaimer
+description = Adds a disclaimer to all Webforms for GDPR compliance
+core = 7.x
+version = "7.x-1.0"
+package = ASU Watts College
+
+; Dependencies
+depencencies[] = webform
